@@ -25,11 +25,12 @@
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 disableDefaultUI: true
             };
-            var map = new google.maps.Map($("#googleMap"), mapProp);
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
             var marker = new google.maps.Marker({
                 position: {lat: 37.7749295, lng: -122.41941550000001},
                 icon: 'http://bestanimations.com/Sci-Fi/Rockets/Rocket-07-june.gif',
+
                 map: map,
                 animation: google.maps.Animation.BOUNCE
             });
@@ -44,6 +45,7 @@
 
             console.log('decode ' + JSON.stringify(decode("San Francisco")));
             console.log('get pos ' + JSON.stringify(marker.getPosition()));
+
             $(window).keydown(function (e) {
                 var pos = marker.getPosition();
                 var lat = pos.lat();

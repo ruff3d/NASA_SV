@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script>
+        function initialize() {
+
+            function decode(adr) {
+                var point = new google.maps.Geocoder();
+                var res;
+
+                point.geocode({'address': adr}, function (result, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                       res = result[0].geometry.location;
+                    }
+                });
+
+                return res;
+
+            }
+
+            var mapProp = {
+                center: new google.maps.LatLng(51.508742, -0.120850),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            var marker = new google.maps.Marker({
+                position: {lat: 37.7749295, lng: -122.41941550000001},
+                icon: 'http://bestanimations.com/Sci-Fi/Rockets/Rocket-07-june.gif',
+                //'http://2.bp.blogspot.com/-OHK1Oi98GNE/UnFDb5rHtUI/AAAAAAAAAcI/pbQ4RmZoUYk/s1600/rocket_ship_retro_style_white_bg.gif',
+                //
+                map: map
+            });
+
+            marker.setMap(map);
+
+            console.log('decode ' + JSON.stringify(decode("San Francisco")));
+            console.log('get pos ' + JSON.stringify(marker.getPosition()));
+         //   marker.setPosition(decode("San Francisco"));
+            $(window).keydown(function (e) {
+                var pos = marker.getPosition();
+                var lat = pos.lat();
+                var lng = pos.lng();
+                console.log(e.which);
+                switch (e.which) {
+                    case 38 :
+                        marker.setPosition({lat: ++lat, lng: lng});
+                        break;
+                    case 40 :
+                        marker.setPosition({lat: --lat, lng: lng});
+                        break;
+                    case 37 :
+                        marker.setPosition({lat: lat, lng: --lng});
+                        break;
+                    case 39 :
+                        marker.setPosition({lat: lat, lng: ++lng});
+
+                }
+                console.log('lng - ' + lng + ', lat - ' + lat)
+            })
+
+        }
+        $(document).ready(initialize);
+
+
+    </script>
+</head>
+
+<body>
+<div id="googleMap" style="width:100%;height:90vh;"></div>
+</body>
+
+</html>

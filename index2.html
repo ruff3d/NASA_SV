@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NASA</title>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <link rel="stylesheet" href="animate.min.css">
+</head>
+<body>
+<style>
+    body {
+        margin: 0;
+    }
+
+    #poligon {
+        background: url('http://entropymag.org/wp-content/uploads/2014/10/outer-space-wallpaper-pictures.jpg');
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    #rocket {
+        width: 100px;
+        height: 150px;
+        position: absolute;
+    }
+
+    #rocket img {
+        transition: 1s;
+    }
+
+    #rocket.left img {
+        transform: rotateZ(-90deg);
+    }
+
+    #rocket.down img {
+        transform: rotateZ(90deg);
+    }
+
+    .seed {
+        position: absolute;
+        bottom: -50px;
+        height: 50px;
+        left: 0;
+    }
+
+    .seed img {
+        height: 100%;
+        transition: 1s;
+    }
+
+    .plant {
+        position: absolute;
+        bottom: -100px;
+        left: 0;
+        height: 100px;
+    }
+
+    .plant img {
+        height: 100%;
+    }
+</style>
+<script>
+
+    function Rocket(x, y) {
+        this.seeds = 0;
+        this.x = x;
+        this.y = y;
+        $('#rocket').css({left: this.x + 'px', top: this.y + 'px'});
+    }
+
+
+    Rocket.prototype.setXY = function (x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+
+    Rocket.prototype.push = function () {
+        this.seeds--;
+    };
+
+    Rocket.prototype.getXY = function () {
+        return {x: this.x, y: this.y}
+    };
+
+    function Seed(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Seed.prototype.setXY = Rocket.prototype.setXY;
+    Seed.prototype.getXY = Rocket.prototype.getXY;
+
+    function Plant(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Plant.prototype.setXY = Rocket.prototype.setXY;
+    Plant.prototype.getXY = Rocket.prototype.getXY;
+
+
+    function rnd(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+
+    $(document).ready(function () {
+
+        rocket = new Rocket(0, window.screen.height - 200);
+
+
+        window.setInterval(function () {
+            seed = new Seed(rnd(10, window.screen.width - 100),window.screen.height);
+            seedDOM = $('.seed').clone();
+            seedDOM.css({left: seed.x + 'px', top: seed.y+'px'}).animate({top: "-50px"}, rnd(6000, 15000)).appendTo("#poligon");
+        }, rnd(1000, 1000));
+
+        $(window).keydown(function (e) {
+            switch (e.which) {
+                case 38 :
+                    rocket.y -= 10;
+                    $('#rocket').removeClass('down');
+                    break;
+                case 40 :
+                    rocket.y += 10;
+                    $('#rocket').addClass('down');
+                    break;
+                case 37 :
+                    rocket.x -= 10;
+                    $('#rocket').addClass('left');
+                    break;
+                case 39 :
+                    rocket.x += 10;
+                    $('#rocket').removeClass('left down');
+
+            }
+            $('#rocket').css({left: rocket.x + 'px', top: rocket.y + 'px'});
+            console.log(JSON.stringify(rocket.getXY()));
+
+        })
+    });
+
+
+</script>
+
+<div id="poligon">
+
+
+    <div id="rocket">
+        <img src="http://bestanimations.com/Sci-Fi/Rockets/Rocket-07-june.gif" alt="rocket">
+    </div>
+    <div class="seed  animated bounce infinite">
+        <img src="http://vignette1.wikia.nocookie.net/quiz-rpg-the-world-of-mystic-wiz/images/f/fc/Seed_of_the_Eternal_Tree_transparent.png/revision/latest?cb=20141230070607"
+             alt="seed">
+
+    </div>
+    <div class="plant animated bounce infinite">
+        <img src="http://helenkrayenhoff.com/wp/wp-content/uploads/2015/08/terrarium.png" alt="Plant">
+    </div>
+</div>
+
+
+</body>
+</html>

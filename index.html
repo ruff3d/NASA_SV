@@ -13,6 +13,7 @@
                 point.geocode({'address': adr}, function (result, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                     marker.setPosition(result[0].geometry.location);
+                        map.setCenter(result[0].geometry.location);
                     }
                 });
 
@@ -34,7 +35,13 @@
             });
 
             marker.setMap(map);
+            $('input#text').keypress(function(e){
+               if (e.which == 13) {
+                   decode($('#text').val());
+               }
+            });
             decode('San Francisco');
+
             console.log('decode ' + JSON.stringify(decode("San Francisco")));
             console.log('get pos ' + JSON.stringify(marker.getPosition()));
          //   marker.setPosition(decode("San Francisco"));
@@ -68,7 +75,8 @@
 </head>
 
 <body>
-<div id="googleMap" style="width:100%;height:90vh;"></div>
+<div id="googleMap" style="width:100%;height:92vh;"></div>
+<input type="text"  id="text" autofocus>
 </body>
 
 </html>
